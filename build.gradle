@@ -1,0 +1,61 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+repositories {
+    mavenCentral()
+    flatDir {
+        dirs 'lib'
+    }
+}
+
+dependencies {
+    implementation files('lib/algs4.jar')
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+}
+
+// Create a task for each main class
+def mainClasses = [
+    'FindConnection',
+    'HelloGoodbye',
+    'HelloWorld',
+    'Percolation',
+    'QuickFindUF',
+    'QuickUnion',
+    'RandomWord'
+]
+
+mainClasses.each { className ->
+    tasks.register("run${className}", JavaExec) {
+        classpath = sourceSets.main.runtimeClasspath
+        mainClass = className
+        // If you need to pass program arguments:
+        // args 'arg1', 'arg2'
+    }
+}
+
+// Optional: Set a default main class for the 'run' task
+application {
+    mainClass = 'HelloWorld'  // Change this to your preferred default
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+// Optional: Create separate JARs for each main class
+mainClasses.each { className ->
+    tasks.register("jar${className}", Jar) {
+        archiveBaseName = "${className.toLowerCase()}"
+        manifest {
+            attributes 'Main-Class': className
+        }
+        from sourceSets.main.output
+        // Include dependencies in the JAR
+        from {
+            configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+        }
+    }
+}
