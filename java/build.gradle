@@ -20,10 +20,11 @@ def mainClasses = [
     'FindConnection',
     'HelloGoodbye',
     'HelloWorld',
-    'Percolation',
     'QuickFindUF',
     'QuickUnion',
-    'RandomWord'
+    'RandomWord',
+    'Percolation',
+    'PercolationStats'
 ]
 
 mainClasses.each { className ->
