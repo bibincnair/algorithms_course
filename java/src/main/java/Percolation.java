@@ -1,11 +1,15 @@
-package java.src.main.java;
+
+import edu.princeton.cs.algs4.StdOut;
+import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdRandom;
-import edu.princeton.cs.algs4.StdStats;
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
 
+    private WeightedQuickUnionUF uf;
     private int[][] grid;
+    private int openSites;
+    private int gridSize;
 
     /**
      * Creates n-by-n grid, with all sites initially blocked
@@ -13,11 +17,13 @@ public class Percolation {
      * @param n
      */
     public Percolation(int n) {
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                grid[i][j] = 0;
-            }
+        if (n <= 0) {
+            throw new IllegalArgumentException("Invalid grid size");
         }
+        uf = new WeightedQuickUnionUF(n * n + 2);
+        grid = new int[n][n];
+        openSites = 0;
+        gridSize = n;
     }
 
     /**
@@ -27,17 +33,37 @@ public class Percolation {
      * @param col
      */
     public void open(int row, int col) {
-        try {
-            if (row < 0 || col < 0) {
-                throw new IllegalArgumentException("Invalid row or column less than 0");
-            }
-            if (row > grid.length || col > grid[0].length) {
-                throw new IllegalArgumentException("Invalid row or column greater than grid size");
-            }
-            grid[row][col] = 1;
-        } catch (Exception e) {
-            System.out.println("Invalid row or column");
+
+        if (row < 1 || row > gridSize || col < 1 || col > gridSize) {
+            throw new IllegalArgumentException("Invalid row or column");
         }
+        if (isOpen(row, col)) {
+            return;
+        }
+        grid[row - 1][col - 1] = 1;
+        openSites++;
+        // Get index in uf
+        int index = (row - 1) * gridSize + (col - 1) + 1;
+        if (row == 1) {
+            uf.union(0, index);
+        }
+        if (row == gridSize) {
+            uf.union(gridSize * gridSize + 1, index);
+        }
+
+        if (row > 1 && isOpen(row - 1, col)) {
+            uf.union(index, index - gridSize);
+        }
+        if (row < gridSize && isOpen(row + 1, col)) {
+            uf.union(index, index + gridSize);
+        }
+        if (col > 1 && isOpen(row, col - 1)) {
+            uf.union(index, index - 1);
+        }
+        if (col < gridSize && isOpen(row, col + 1)) {
+            uf.union(index, index + 1);
+        }
+
     }
 
     /**
@@ -48,7 +74,7 @@ public class Percolation {
      * @return
      */
     public boolean isOpen(int row, int col) {
-        return false;
+        return grid[row - 1][col - 1] == 1;
     }
 
     /**
@@ -59,7 +85,7 @@ public class Percolation {
      * @return
      */
     public boolean isFull(int row, int col) {
-        return false;
+        return grid[row - 1][col - 1] == 0;
     }
 
     /**
@@ -68,7 +94,7 @@ public class Percolation {
      * @return
      */
     public int numberOfOpenSites() {
-        return 0;
+        return openSites;
     }
 
     /**
@@ -77,10 +103,22 @@ public class Percolation {
      * @return
      */
     public boolean percolates() {
-        return false;
+        // Check if the virtual top and virtual bottom are connected
+        return uf.find(0) == uf.find(gridSize * gridSize + 1);
     }
 
     public static void main(String[] args) {
-        // test client (optional)
+        // Test the Percolation class
+        int n = 5000;
+        Percolation p = new Percolation(n);
+        while (!p.percolates()) {
+            int row = StdRandom.uniformInt(0, n) + 1;
+            int col = StdRandom.uniformInt(0, n) + 1;
+            p.open(row, col);
+        }
+        StdOut.println("Percolates");
+        StdOut.println("Number of open sites: " + p.numberOfOpenSites());
+        // Print ratio of open sites
+        StdOut.println("Ratio: " + (double) p.numberOfOpenSites() / (n * n));
     }
 }
