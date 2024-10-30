@@ -1,5 +1,6 @@
 {
     "python.analysis.extraPaths": [
         "./python/src/python"
-    ]
+    ],
+    "java.configuration.updateBuildConfiguration": "automatic"
 }
