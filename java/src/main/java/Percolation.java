@@ -22,6 +22,12 @@ public class Percolation {
         }
         uf = new WeightedQuickUnionUF(n * n + 2);
         grid = new int[n][n];
+        // Initialize all sites as blocked
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                grid[i][j] = 0;
+            }
+        }
         openSites = 0;
         gridSize = n;
     }
@@ -74,6 +80,9 @@ public class Percolation {
      * @return
      */
     public boolean isOpen(int row, int col) {
+        if (row < 1 || row > gridSize || col < 1 || col > gridSize) {
+            throw new IllegalArgumentException("Invalid row or column");
+        }
         return grid[row - 1][col - 1] == 1;
     }
 
@@ -85,7 +94,11 @@ public class Percolation {
      * @return
      */
     public boolean isFull(int row, int col) {
-        return grid[row - 1][col - 1] == 0;
+        if (row < 1 || row > gridSize || col < 1 || col > gridSize) {
+            throw new IllegalArgumentException("Invalid row or column");
+        }
+        // A full site is an open site that can be connected to an open site in the top row via a chain of neighboring (left, right, up, down) open sites.
+        return uf.find(0) == uf.find((row - 1) * gridSize + col);
     }
 
     /**
