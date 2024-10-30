@@ -4,3 +4,6 @@ gradle-wrapper.properties
 gradle/
 build/
 .gradle/
+
+# Add rust build files to gitignore
+target/
