@@ -1,5 +1,5 @@
 import pytest
-import binary_sort
+import pyalgos.binary_sort as binary_sort
 
 
 def test_element_found():

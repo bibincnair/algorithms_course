@@ -7,3 +7,4 @@ build/
 
 # Add rust build files to gitignore
 target/
+*.class
