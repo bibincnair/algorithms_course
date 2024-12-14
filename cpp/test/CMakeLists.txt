@@ -33,6 +33,7 @@ add_executable(
   tests tests.cpp
   test_merge_sorted_array.cpp
   test_remove_elements.cpp
+  test_remove_duplicate_sorted_array.cpp
 )
 target_link_libraries(
   tests
