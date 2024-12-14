@@ -1,9 +1,15 @@
 {
     "python.analysis.extraPaths": [
-        "./python/src/python"
+        "${workspaceFolder}/pyalgos/src"
     ],
     "java.configuration.updateBuildConfiguration": "automatic",
     "files.associations": {
         "vector": "cpp"
-    }
+    },
+    "python.testing.pytestArgs": [
+        "pyalgos"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "python.testing.cwd": "${workspaceFolder}"
 }
