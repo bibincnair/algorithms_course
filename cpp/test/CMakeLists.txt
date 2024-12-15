@@ -35,6 +35,7 @@ add_executable(
   test_remove_elements.cpp
   test_remove_duplicate_sorted_array.cpp
   test_remove_duplicates_second.cpp
+  test_majority_element.cpp
 )
 target_link_libraries(
   tests
