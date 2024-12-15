@@ -4,7 +4,7 @@ using std::vector;
 
 namespace rotate_array {
 class Solution
-{
+{   
 public:
   void rotate(vector<int> &nums, int k)
   {
