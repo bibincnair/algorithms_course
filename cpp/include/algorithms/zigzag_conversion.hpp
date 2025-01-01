@@ -23,13 +23,22 @@ public:
         traversal_len = 2 * numRows - 2;
         for (int i = rowid; i < s.size(); i += traversal_len) { output.push_back(s[i]); }
       } else {
-        traversal_len = (numRows - rowid - 1) * 2 - 2;
-        for (int i = rowid; i < s.size(); i += traversal_len) {
+        // Use a two-step approach for middle rows
+        int step1 = 2 * (numRows - rowid - 1);
+        int step2 = 2 * rowid;
+        bool toggle = true;
+
+        for (int i = rowid; i < static_cast<int>(s.size());) {
           output.push_back(s[i]);
-          if (i + traversal_len < s.size()) { output.push_back(s[i + traversal_len]); }
+          // Alternate between step1 and step2
+          i += toggle ? step1 : step2;
+          // If step size is zero (can happen if rowid is 0 or numRows - 1, but we are in else),
+          // just break to avoid infinite loop
+          if ((toggle && step1 == 0) || (!toggle && step2 == 0)) break;
+          toggle = !toggle;
         }
       }
-        rowid++;
+      rowid++;
     }
     return output;
   }
