@@ -17,8 +17,11 @@ public:
     auto rev_iter = input_str.rbegin();
 
     while (fwd_iter < rev_iter.base()) {
-      while (!static_cast<bool>(isalnum(*fwd_iter))) { ++fwd_iter; }
-      while (!static_cast<bool>(isalnum(*rev_iter))) { ++rev_iter; }
+      while (fwd_iter < rev_iter.base() && !std::isalnum(*fwd_iter)) { ++fwd_iter; }
+      while (rev_iter.base() > fwd_iter && !std::isalnum(*rev_iter)) { ++rev_iter; }
+      if(fwd_iter >= rev_iter.base()){
+        break;
+      }
  
       if (std::tolower(*fwd_iter) != std::tolower(*rev_iter)) {
         return false;
