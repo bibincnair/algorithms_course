@@ -1,11 +1,12 @@
 from typing import List
+from collections import defaultdict
 
 
 class Solution:
     def isValidSudoku(self, board: List[List[str]]) -> bool:
-        row_flags = [[False for i in range(10)] for j in range(9)]
-        col_flags = [[False for i in range(10)] for j in range(9)]
-        boxes_flags = [[False for i in range(10)] for j in range(9)]
+        row_flags = defaultdict(lambda: defaultdict(bool))
+        col_flags = defaultdict(lambda: defaultdict(bool))
+        boxes_flags = defaultdict(lambda: defaultdict(bool))
 
         for row in range(9):
             for col in range(9):
