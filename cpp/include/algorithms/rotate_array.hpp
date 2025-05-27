@@ -9,7 +9,7 @@ public:
   void rotate(vector<int> &nums, int k)
   {
     if (nums.empty()) return;
-    std::reverse(nums.begin(), nums.end(    ));
+    std::ranges::reverse(nums);
     std::reverse(nums.begin(), nums.begin() + k);
     std::reverse(nums.begin() + k, nums.end());
   }
